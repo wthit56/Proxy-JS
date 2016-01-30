@@ -1,0 +1,35 @@
+/*
+setCookie({ key: "a", value: "1" }, true, "a=1"); /// getter renders
+setCookie({ key: "b", value: "2" }, true, "a=1; b=2"); /// getter renders more than one cookie
+setCookie({ key: "a", value: "3" }, true, "b=2; a=3"); /// order updated
+
+setCookie({ key: "a", value: "4", expires: 0 }, false, "b=2"); /// out of date, cookie immediately expires
+
+instance.date = new Date(0);
+setCookie({ key: "b", value: "5", expires: instance.date }, false, ""); /// expires is equal to current date; should expire
+setCookie({ key: "b", value: "6", expires: instance.date - 1 }, false, ""); /// expires is less than current date; should expire
+setCookie({ key: "b", value: "6.1", expires: new Date(+instance.date + 1) }, false, ""); /// date rounded down to the nearest second
+setCookie({ key: "b", value: "6.2", expires: +instance.date + 1 }, false, ""); /// number rounded down to the nearest second
+
+setCookie({ key: "b", value: "7", expires: new Date(+instance.date + 1000) }, true, "b=7"); /// 1 second in the future, not expired
+instance.setCookie({ key: "b", expires: 0 });
+
+setCookie({ key: "c", value: "8" }, true, "c=8"); /// no `expires` set; session cookie
+instance.session = {}; instance.checkExpiry();
+instance.get() === ""; /// session has changed; cookie expires
+
+var date = new Date(); date = new Date(date.setFullYear(3000));
+setCookie({ key: "c", value: "9", expires: date }, true, "c=9"); /// expires date is in the future
+instance.date = new Date(+date + 1000); instance.checkExpiry();
+instance.get() === ""; /// date now in the past; cookie expires
+*/
+
+/*{ /* .set([string] input) *\/
+	var set = createTest(function(input) {
+		return instance.set(input);
+	});
+	set("d=1", true, "d=1"); ///
+	console.log(instance.get());
+	set("d=1=2", true); ///
+	console.log(instance.get());
+}*/
